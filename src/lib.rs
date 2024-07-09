@@ -1,9 +1,20 @@
+mod gui;
+mod biblio;
+mod files;
+
+
 pub mod prelude {
   pub use bevy::prelude::*;
+  pub use crate::files::{InputsFolders, StorageFolder};
+  pub use crate::biblio::{
+    Title,
+    DataFolder,
+  };
 }
 
 pub mod plugins {
-
+    pub use crate::gui::GUIPlugin;
+    pub use crate::files::FilesPlugin;
 }
 
 mod app {
