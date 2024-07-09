@@ -1,6 +1,7 @@
 mod gui;
 mod biblio;
 mod files;
+mod palette;
 
 
 pub mod prelude {
@@ -10,11 +11,13 @@ pub mod prelude {
     Title,
     DataFolder,
   };
+  pub use crate::palette::ColorPalette;
 }
 
 pub mod plugins {
     pub use crate::gui::GUIPlugin;
     pub use crate::files::FilesPlugin;
+    pub use crate::palette::ColorPalettePlugin;
 }
 
 mod app {

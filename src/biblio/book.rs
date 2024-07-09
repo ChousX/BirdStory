@@ -10,9 +10,16 @@ pub struct Readers(Vec<Entity>);
 pub struct BookDuration(Duration);
 
 #[derive(Component, DeRef, DeRefMut)]
-pub struct DataFolder(String);
-
-#[derive(Component, DeRef, DeRefMut)]
 pub struct Title(String);
+
+pub fn add_title(
+    mut commands: Commands, 
+    books: Query<(Entity, &DataFolder), (Without<Title>, With<UnmovedData>)>
+){
+    for (id, path) in books.iter() {
+        let title = todo!();
+        commands.entity(id).insert(Title(title));
+    }
+}
 
 
