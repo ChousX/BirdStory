@@ -4,11 +4,11 @@ mod book;
 mod author;
 mod narrator;
 
-use series::*;
-use person::*;
-use book::*;
-use author::*;
-use narrator::*;
+pub use series::*;
+pub use person::*;
+pub use book::*;
+pub use author::*;
+pub use narrator::*;
 
 use crate::prelude::*;
 use bevy::utils::Duration;
@@ -17,7 +17,6 @@ use bevy::utils::Duration;
 pub struct BiblioPlugin;
 impl Plugin for BiblioPlugin{
     fn build(&self, app: &mut App) {
-        app
 
     }
 }

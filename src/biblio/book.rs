@@ -1,16 +1,16 @@
 use super::*;
 
-#[derive(Component, DeRef, DeRefMut)]
-pub struct Writers(Vec<Entity>);
+#[derive(Component, Deref, DerefMut)]
+pub struct Writers(pub Vec<Entity>);
 
-#[derive(Component, DeRef, DeRefMut)]
-pub struct Readers(Vec<Entity>);
+#[derive(Component, Deref, DerefMut)]
+pub struct Readers(pub Vec<Entity>);
 
-#[derive(Component, DeRef, DeRefMut)]
-pub struct BookDuration(Duration);
+#[derive(Component, Deref, DerefMut)]
+pub struct BookDuration(pub Duration);
 
-#[derive(Component, DeRef, DeRefMut)]
-pub struct Title(String);
+#[derive(Component, Deref, DerefMut)]
+pub struct Title(pub String);
 
 pub fn add_title(
     mut commands: Commands, 

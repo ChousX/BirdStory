@@ -1,5 +1,6 @@
+use super::*;
 
-#[derive(Component, DeRef, DeRefMut)]
+#[derive(Component, Deref, DerefMut)]
 pub struct SeriesWorks(Vec<Entity>);
 
 #[derive(Bundle)]

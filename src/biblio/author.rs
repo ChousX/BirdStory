@@ -6,7 +6,7 @@ pub struct AuthorBundle {
     pub works: AuthoredWorks
 }
 
-#[derive(Component, DeRef, DeRefMut)]
+#[derive(Component, Deref, DerefMut)]
 pub struct AuthoredWorks(Vec<Entity>);
 
 pub fn add_authors(

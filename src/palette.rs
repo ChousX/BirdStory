@@ -3,7 +3,7 @@ use crate::prelude::*;
 pub struct ColorPalettePlugin;
 impl Plugin for ColorPalettePlugin {
     fn build(&self, app: &mut App) {
-        app.init_resource::<ColorPalette>()
+        app.init_resource::<ColorPalette>();
     }
 }
 

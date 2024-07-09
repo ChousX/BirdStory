@@ -6,10 +6,14 @@ mod palette;
 
 pub mod prelude {
   pub use bevy::prelude::*;
-  pub use crate::files::{InputsFolders, StorageFolder};
+  pub use crate::files::{
+      InputsFolders,
+      StorageFolder,
+      DataFolder,
+      UnmovedData
+  };
   pub use crate::biblio::{
     Title,
-    DataFolder,
   };
   pub use crate::palette::ColorPalette;
 }

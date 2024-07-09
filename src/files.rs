@@ -5,7 +5,7 @@ impl Plugin for FilesPlugin {
     fn build(&self, app: &mut App) {
         app
             .init_resource::<StorageFolder>()
-            .init_resource::<InputsFolders>()
+            .init_resource::<InputsFolders>();
     }
 }
 
@@ -20,7 +20,7 @@ impl Default for StorageFolder {
     }
 }
 
-#[derive(Component, DeRef, DeRefMut)]
+#[derive(Component, Deref, DerefMut)]
 pub struct DataFolder(String);
 
 #[derive(Component, Default)]
@@ -30,7 +30,7 @@ pub struct UnmovedData;
 pub struct AddNewBooksEvent;
 
 
-#[derive(Event, Default)]
+#[derive(Event)]
 pub struct MigrateBooks(pub Entity);
 
 fn build_config() -> String{
