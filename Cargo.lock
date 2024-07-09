@@ -7,6 +7,7 @@ name = "StoryBird"
 version = "0.1.0"
 dependencies = [
  "bevy",
+ "bevy_simple_text_input",
 ]
 
 [[package]]
@@ -912,6 +913,15 @@ dependencies = [
  "serde",
  "thiserror",
  "uuid",
+]
+
+[[package]]
+name = "bevy_simple_text_input"
+version = "0.8.0"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "96ff52beee8948f31238ede22c9a2fc61c0cbd3ee9755c5f7fef35243a8ff146"
+dependencies = [
+ "bevy",
 ]
 
 [[package]]

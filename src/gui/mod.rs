@@ -62,6 +62,16 @@ fn init_gui( mut commands: Commands) {
             ..default()
         }).id();
 
+    let searchbar = commands
+        .spawn(NodeBundle {
+            style: Style {
+                width: Val::Percent(100.0),
+                height: Val::Percent(20.0),
+                justify_content: JustifyContent::SpaceBetween,
+                ..default()
+            },
+            ..default()
+        }).id();
     commands.entity(root).add_child(brows_view);
     commands.entity(root).add_child(info_view);
 
