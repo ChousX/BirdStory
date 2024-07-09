@@ -26,7 +26,7 @@ pub struct BrowsView(Entity);
 #[derive(Resource)]
 pub struct InfoView(Entity);
 
-fn init_gui( mut commands: Commands) {
+fn init_gui( mut commands: Commands, colors: Res<ColorPalette>) {
     let root = commands
         .spawn(NodeBundle {
             style: Style {
@@ -46,7 +46,7 @@ fn init_gui( mut commands: Commands) {
                 justify_content: JustifyContent::SpaceAround,
                 ..default()
             },
-            background_color: Color::hsl(344.0, 100.0, 50.0).into(),
+            background_color: colors.0[0].clone().into(),
             ..default()
         }).id();
 
@@ -58,7 +58,7 @@ fn init_gui( mut commands: Commands) {
                 justify_content: JustifyContent::SpaceAround,
                 ..default()
             },
-            background_color: Color::hsl(205.0, 100.0, 50.0).into(),
+            background_color: colors.0[1].clone().into(),
             ..default()
         }).id();
 
@@ -72,6 +72,7 @@ fn init_gui( mut commands: Commands) {
             },
             ..default()
         }).id();
+
     commands.entity(root).add_child(brows_view);
     commands.entity(root).add_child(info_view);
 
