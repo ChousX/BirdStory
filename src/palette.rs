@@ -8,12 +8,16 @@ impl Plugin for ColorPalettePlugin {
 }
 
 #[derive(Resource)]
-pub struct ColorPalette(pub [Color; 7]);
+pub struct ColorPalette(pub [Color; 10]);
 
 impl Default for ColorPalette {
     fn default() -> Self {
+        use bevy::color::palettes::css::*;
         let colors = [
-            Color::srgb_u8(1, 1, 1),
+            CADET_BLUE.into(),
+            DARK_CYAN.into(),
+            DARK_SLATE_GREY.into(),
+            BLACK.into(),
             Color::srgb_u8(255, 255, 255),
             Color::srgb_u8(83, 82, 173),
             Color::srgb_u8(83, 82, 163),
@@ -31,28 +35,28 @@ impl ColorPalette{
     }
 
     pub fn info_view(&self) -> Color{
-        self.0[5].clone()
+        self.0[2].clone()
     }
 
     pub fn text_active(&self) -> Color{
-        self.0[3].clone()
+        self.0[4].clone()
     }
 
     pub fn text_inactive(&self) -> Color{
-        self.0[4].clone()
+        self.0[1].clone()
     }
 
 
     pub fn border_active(&self) -> Color{
-        self.0[3].clone()
+        self.0[0].clone()
     }
 
     pub fn border_inactive(&self) -> Color{
-        self.0[5].clone()
+        self.0[1].clone()
     }
 
     pub fn search_text(&self) -> Color{
-        self.0[0].clone()
+        self.0[4].clone()
     }
 
     pub fn search_bar_border(&self) -> Color{
@@ -61,6 +65,18 @@ impl ColorPalette{
 
     pub fn search_bar_background(&self) -> Color{
         self.0[1].clone()
+    }
+
+    pub fn search_button_normal(&self) -> Color{
+        self.0[2].clone()
+    }
+
+    pub fn search_button_hovered(&self) -> Color {
+        self.0[3].clone()
+    }
+
+    pub fn search_button_pressed(&self) -> Color {
+        self.0[4].clone()
     }
 }
 
