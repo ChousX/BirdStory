@@ -8,17 +8,59 @@ impl Plugin for ColorPalettePlugin {
 }
 
 #[derive(Resource)]
-pub struct ColorPalette(pub [Color; 4]);
+pub struct ColorPalette(pub [Color; 7]);
 
 impl Default for ColorPalette {
     fn default() -> Self {
         let colors = [
+            Color::srgb_u8(1, 1, 1),
+            Color::srgb_u8(255, 255, 255),
             Color::srgb_u8(83, 82, 173),
+            Color::srgb_u8(83, 82, 163),
+            Color::srgb_u8(82, 173, 129),
             Color::srgb_u8(173, 82, 126),
-            Color::srgb_u8(172, 173, 82),
-            Color::srgb_u8(82, 173, 129)
+            Color::srgb_u8(122, 173, 82),
         ];
         Self(colors)
+    }
+}
+
+impl ColorPalette{
+    pub fn brows_view(&self) -> Color{
+        self.0[2].clone()
+    }
+
+    pub fn info_view(&self) -> Color{
+        self.0[5].clone()
+    }
+
+    pub fn text_active(&self) -> Color{
+        self.0[3].clone()
+    }
+
+    pub fn text_inactive(&self) -> Color{
+        self.0[4].clone()
+    }
+
+
+    pub fn border_active(&self) -> Color{
+        self.0[3].clone()
+    }
+
+    pub fn border_inactive(&self) -> Color{
+        self.0[5].clone()
+    }
+
+    pub fn search_text(&self) -> Color{
+        self.0[0].clone()
+    }
+
+    pub fn search_bar_border(&self) -> Color{
+        self.0[2].clone()
+    }
+
+    pub fn search_bar_background(&self) -> Color{
+        self.0[1].clone()
     }
 }
 
