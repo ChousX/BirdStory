@@ -17,7 +17,12 @@ use bevy::utils::Duration;
 pub struct BiblioPlugin;
 impl Plugin for BiblioPlugin{
     fn build(&self, app: &mut App) {
-
+        app
+            .init_resource::<Series>()
+            .add_systems(
+                Update,
+                (add_title, add_authors, add_narrators, add_series)
+            );
     }
 }
 
