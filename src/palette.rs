@@ -78,6 +78,18 @@ impl ColorPalette{
     pub fn search_button_pressed(&self) -> Color {
         self.0[4].clone()
     }
+
+    pub fn selection_view(&self) -> Color { 
+        self.0[5].clone()
+    }
+
+    pub fn cover_art_viewer(&self) -> Color {
+        self.0[7].clone()
+    }
+
+    pub fn more_info_viewer(&self) -> Color { 
+        self.0[6].clone()
+    }
 }
 
 
