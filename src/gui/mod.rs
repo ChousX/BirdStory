@@ -17,9 +17,6 @@ impl Plugin for GUIPlugin{
             ).add_systems(
                 Update, 
                 search_button_system.after(TextInputSystem)
-            ).add_systems(
-                Update,
-                search_event_runner.run_if( on_event::<SearchEvent>())
             );
     }
 }
@@ -134,6 +131,7 @@ fn init_gui( mut commands: Commands, colors: Res<ColorPalette>) {
                     border_color: colors.search_button_hovered().into(),
                     ..default()
                 },
+                SearchButton,
             )).id();
 
         commands.entity(searchbar).add_child(search_text);
@@ -143,9 +141,10 @@ fn init_gui( mut commands: Commands, colors: Res<ColorPalette>) {
 
     commands.entity(root).add_child(brows_view);
     commands.entity(root).add_child(info_view);
-
-    commands.insert_resource(BrowsView(brows_view));
-    commands.insert_resource(InfoView(info_view));
+    
+    {
+        
+    }
 }
 
 fn init_camera(mut commands: Commands) { 
@@ -153,7 +152,7 @@ fn init_camera(mut commands: Commands) {
 }
 
 fn focus(
-    query: Query<(Entity, &Interaction), Changed<Interaction>>,
+    query: Query<(Entity, &Interaction), (Changed<Interaction>, With<SearchButton>)>,
     mut text_input_query: Query<(Entity, &mut TextInputInactive, &mut BorderColor)>,
     colors: Res<ColorPalette>,
 ) {
@@ -206,9 +205,3 @@ fn search_button_system(
     }
 }
 
-fn search_event_runner(
-    mut text_query: Query<&TextInputValue, With<SearchText>>,
-) {
-    let text = text_query.single();
-    dbg!(&text.0);
-}
