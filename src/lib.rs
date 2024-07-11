@@ -2,6 +2,7 @@ mod gui;
 mod biblio;
 mod files;
 mod palette;
+mod search;
 
 
 pub mod prelude {
@@ -12,16 +13,17 @@ pub mod prelude {
       DataFolder,
       UnmovedData
   };
-  pub use crate::biblio::{
-    Title,
-  };
+  pub use crate::biblio::Title;
   pub use crate::palette::ColorPalette;
+  pub use crate::gui::SearchEvent;
+  pub use crate::search::SearchResults;
 }
 
 pub mod plugins {
     pub use crate::gui::GUIPlugin;
     pub use crate::files::FilesPlugin;
     pub use crate::palette::ColorPalettePlugin;
+    pub use crate::search::SearchPlugin;
 }
 
 mod app {

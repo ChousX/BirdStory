@@ -90,6 +90,10 @@ impl ColorPalette{
     pub fn more_info_viewer(&self) -> Color { 
         self.0[6].clone()
     }
+
+    pub fn cover_art_padding(&self) -> Color {
+        self.0[8].clone()
+    }
 }
 
 

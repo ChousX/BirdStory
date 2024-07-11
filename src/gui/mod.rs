@@ -6,7 +6,8 @@ use bevy_simple_text_input::{
     TextInputPlugin,
     TextInputSubmitEvent,
     TextInputSystem,
-    TextInputValue};
+    TextInputValue
+};
 
 pub struct GUIPlugin;
 impl Plugin for GUIPlugin{
@@ -129,7 +130,7 @@ fn init_gui( mut commands: Commands, colors: Res<ColorPalette>) {
                     color: colors.search_text(),
                     ..default()
                 })
-                    .with_placeholder( "Click Me", None)
+                    .with_placeholder( "Search", None)
                     .with_inactive(true),
                 SearchText,
             )).id();
@@ -178,6 +179,7 @@ fn init_gui( mut commands: Commands, colors: Res<ColorPalette>) {
                 style: Style {
                     height: Val::Percent(45.0),
                     width: Val::Percent(100.0),
+                    flex_direction: FlexDirection::Row,
                     ..default()
                 },
                 background_color: colors.cover_art_viewer().into(),
@@ -185,6 +187,7 @@ fn init_gui( mut commands: Commands, colors: Res<ColorPalette>) {
             },
             CoverArtViewer,
         )).id();
+
         {
             let padding0 = commands.spawn((
                 NodeBundle {
@@ -193,6 +196,7 @@ fn init_gui( mut commands: Commands, colors: Res<ColorPalette>) {
                         width: Val::Percent(20.0),
                         ..default()
                     },
+                    background_color: colors.cover_art_padding().into(),
                     ..default()
                 
                 },
@@ -205,6 +209,7 @@ fn init_gui( mut commands: Commands, colors: Res<ColorPalette>) {
                         width: Val::Percent(20.0),
                         ..default()
                     },
+                    background_color: colors.cover_art_padding().into(),
                     ..default()
                 
                 },
