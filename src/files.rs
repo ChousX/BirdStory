@@ -1,6 +1,17 @@
-use bevy::scene::ron::{to_string, Result};
-use std::path::{Path, PathBuf};
+use bevy::ecs::query::QueryData;
+use nfo::{
+    Nfo,
+    Source,
+    GeneralInformation,
+    MediaInformation,
+    Encoded
+};
+use std::path::{
+    Path, 
+    PathBuf
+};
 use std::fs;
+use std::ffi::OsStr;
 use std::collections::BinaryHeap as Heap;
 use crate::prelude::*;
 
@@ -16,6 +27,7 @@ impl Plugin for FilesPlugin {
             .add_event::<AddNewBooksEvent>()
             .add_event::<MoveBookEvent>()
             .add_event::<FixSingleFiles>()
+            .add_event::<GetInfoEvent>()
             .add_systems(
                 PreUpdate,
                     add_dir_inputs.run_if(on_event::<AddNewBooksEvent>()),
@@ -23,6 +35,7 @@ impl Plugin for FilesPlugin {
                 Update,
                 (
                      move_book_to_storage,
+                     get_info_from_folder.run_if(on_event::<GetInfoEvent>()),
                      fix_single_files.run_if(on_event::<FixSingleFiles>()),
                 )
             );
@@ -123,6 +136,8 @@ impl FoldersInfo {
 fn add_dir_inputs(
     mut commands: Commands,
     input_folders: Res<InputsFolders>,
+    mut fix_solo: EventWriter<FixSingleFiles>,
+    mut add_info: EventWriter<GetInfoEvent>,
 ) {
     for folder in input_folders.0.iter(){
         if let Ok(FoldersInfo { 
@@ -130,18 +145,27 @@ fn add_dir_inputs(
             mut folders_with_no_sub_folders, 
             mut loss_files 
         }) = FoldersInfo::new(folder){
+
+            if !loss_files.is_empty() {
+                fix_solo.send(FixSingleFiles);
+            }
+
             for book in loss_files.into_iter(){
-                commands.spawn((
+                let id = commands.spawn((
                     DataFolder(book),
                     UnmovedData,
                     SingleFile,
-                ));
+                )).id();
+
             }
+
             for book in folders_with_no_sub_folders.into_iter(){
-                commands.spawn((
+                let id = commands.spawn((
                     DataFolder(book),
                     UnmovedData,
-                ));
+                )).id();
+
+                add_info.send(GetInfoEvent(id));
             }
         }
     }
@@ -150,7 +174,7 @@ fn add_dir_inputs(
 #[derive(Component)]
 pub struct SingleFile;
 
-#[derive(Event )]
+#[derive(Event)]
 pub struct FixSingleFiles;
 
 fn fix_single_files(
@@ -204,7 +228,7 @@ fn move_book_to_storage(
             }
         //Folder has been moved
             //Updating folder Local
-            book_current_dir.0 = to.into_os_string().into_string().expect("bad file str");;
+            book_current_dir.0 = to.into_os_string().into_string().expect("bad file str");
             
             //removing unmoved_data tag;
             commands.entity(*book_id).remove::<UnmovedData>();
@@ -260,4 +284,36 @@ pub fn copy<U: AsRef<Path>, V: AsRef<Path>>(from: U, to: V) -> Result<(), std::i
     }
 
     Ok(())
+}
+
+#[derive(Event)]
+pub struct GetInfoEvent(pub Entity);
+
+#[derive(Component, Deref, DerefMut)]
+pub struct NfoData(pub Nfo);
+
+fn get_info_from_folder(
+    mut commands: Commands,
+    mut events: EventReader<GetInfoEvent>, 
+    mut folders: Query<&DataFolder, (Without<SingleFile>, With<UnmovedData>)>
+) {
+    for GetInfoEvent(entity) in  events.read(){
+        if let Ok(DataFolder(folder_str)) = folders.get(*entity){
+            let folder_path = Path::new(&folder_str);
+            let mut folder_iter = fs::read_dir(&folder_path).expect("bad file str");
+            for file in folder_iter{
+                let file_path = file.expect("bad file").path();
+                let file_str = file_path.clone().into_os_string().into_string().expect("bad string");
+                if let Some(extension) = file_path.extension(){
+                    let nfo_str = OsStr::new("nfo");
+                    if extension == nfo_str {
+                        if let Some(nfo_data) = Nfo::new(file_str){
+                            let nfo_data = NfoData(nfo_data);
+                            commands.entity(*entity).insert(nfo_data);
+                        }
+                    }
+                }
+            }
+        }
+    }
 }
