@@ -83,7 +83,7 @@ struct FoldersInfo{
 impl FoldersInfo {
     pub fn new(
         root_folder: &str,
-    ) -> Result<Self>{
+    ) -> Result<Self, std::io::Error>{
     
         let root_path = Path::new(root_folder);
         let mut folder_iter = std::fs::read_dir(root_path)?;
