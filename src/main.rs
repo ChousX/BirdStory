@@ -6,7 +6,8 @@ fn main() {
         .add_plugins((
             GUIPlugin, 
             ColorPalettePlugin, 
-            FilesPlugin
+            FilesPlugin,
+            BiblioPlugin,
          ))
         .run();
 }

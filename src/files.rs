@@ -30,7 +30,7 @@ impl Plugin for FilesPlugin {
             .add_event::<GetInfoEvent>()
             .add_systems(
                 PreUpdate,
-                    add_dir_inputs.run_if(on_event::<AddNewBooksEvent>()),
+                add_dir_inputs.run_if(on_event::<AddNewBooksEvent>()),
             ).add_systems(
                 Update,
                 (
@@ -38,8 +38,17 @@ impl Plugin for FilesPlugin {
                      get_info_from_folder.run_if(on_event::<GetInfoEvent>()),
                      fix_single_files.run_if(on_event::<FixSingleFiles>()),
                 )
+            ).add_systems(
+                Startup,
+                init
             );
     }
+}
+
+fn init(
+    mut add: EventWriter<AddNewBooksEvent>,
+){
+    add.send(AddNewBooksEvent);
 }
 
 #[derive(Resource, Deref, DerefMut)]
@@ -317,3 +326,4 @@ fn get_info_from_folder(
         }
     }
 }
+

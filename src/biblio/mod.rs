@@ -21,7 +21,7 @@ impl Plugin for BiblioPlugin{
             .init_resource::<Series>()
             .add_systems(
                 Update,
-                (add_title, add_authors, add_narrators, add_series)
+                (add_using_nfo, show_titles)
             );
     }
 }

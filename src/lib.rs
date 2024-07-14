@@ -11,11 +11,19 @@ pub mod prelude {
       InputsFolders,
       StorageFolder,
       DataFolder,
-      UnmovedData
+      UnmovedData,
+      NfoData,
   };
   pub use crate::biblio::Title;
   pub use crate::palette::ColorPalette;
-  pub use crate::gui::SearchEvent;
+  pub use crate::gui::{
+        SearchEvent,
+        popout::{
+            PopOutWindowCamera,
+            PopOutWindow,
+            SpawnPopOutWindowEvent,
+        },
+  };
   pub use crate::search::SearchResults;
 }
 
@@ -24,6 +32,7 @@ pub mod plugins {
     pub use crate::files::FilesPlugin;
     pub use crate::palette::ColorPalettePlugin;
     pub use crate::search::SearchPlugin;
+    pub use crate::biblio::BiblioPlugin;
 }
 
 mod app {
