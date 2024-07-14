@@ -9,7 +9,7 @@ edition = "2021"
 bevy = { package = "bevy", version = "0.14.0" }
 bevy_simple_text_input = "0.8.0"
 nfo = {git = "https://github.com/ChousX/nfo.git"}
-
+bevy_pop_out_window = {git = "https://github.com/ChousX/PopOutWindow.git"}
 [profile.dev]
 opt-level = 1
 

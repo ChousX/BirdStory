@@ -1,4 +1,3 @@
-pub mod popout;
 mod book_entry;
 use crate::prelude::*;
 use bevy::render::render_graph::Node;
@@ -10,13 +9,15 @@ use bevy_simple_text_input::{
     TextInputSystem,
     TextInputValue
 };
+use bevy_pop_out_window::prelude::*;
+
 
 pub struct GUIPlugin;
 impl Plugin for GUIPlugin{
     fn build(&self, app: &mut App) {
         app
             .add_plugins(TextInputPlugin)
-            .add_plugins(popout::PopOutWindowPlugin)
+            .add_plugins(PopOutWindowPlugin)
             .add_event::<SearchEvent>()
             .add_systems(
                 Startup, 
