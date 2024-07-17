@@ -1,4 +1,3 @@
-use bevy::ecs::query::QueryData;
 use nfo::{
     Nfo,
     Source,

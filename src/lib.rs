@@ -16,10 +16,9 @@ pub mod prelude {
   };
   pub use crate::biblio::Title;
   pub use crate::palette::ColorPalette;
-  pub use crate::gui::{
-        SearchEvent,
-  };
+  pub use crate::gui::SearchEvent;
   pub use crate::search::SearchResults;
+  pub use crate::app::*;
 }
 
 pub mod plugins {
@@ -31,12 +30,12 @@ pub mod plugins {
 }
 
 mod app {
-  use crate::prelude::*;
-  #[derive(States, Default, Debug, Clone, PartialEq, Eq, Hash)]
-  pub enum AppState {
-    #[default]
-    Entry,
-  }
+    use crate::prelude::*;
+    #[derive(States, Default, Debug, Clone, PartialEq, Eq, Hash)]
+    pub enum AppState {
+        #[default]
+        Entry,
+    }
 
-  pub const APP_NAME: &str = "StoryBird";
+    pub const APP_NAME: &str = "StoryBird";
 }

@@ -1,13 +1,12 @@
 mod book_entry;
 use crate::prelude::*;
-use bevy::render::render_graph::Node;
 use bevy_simple_text_input::{
     TextInputBundle,
     TextInputInactive,
     TextInputPlugin,
-    TextInputSubmitEvent,
+    //TextInputSubmitEvent,
     TextInputSystem,
-    TextInputValue
+    //TextInputValue
 };
 use bevy_pop_out_window::prelude::*;
 use book_entry::*;
