@@ -13,7 +13,8 @@ impl Plugin for SearchPlugin{
             .init_resource::<SearchResults>()
             .add_systems(
                 Update,
-                search_by_book_title.run_if(on_event::<SearchEvent>())
+                search_by_book_title
+                //.run_if(on_event::<SearchEvent>())
             )
         ;
     }

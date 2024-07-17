@@ -16,7 +16,6 @@ pub mod prelude {
   };
   pub use crate::biblio::Title;
   pub use crate::palette::ColorPalette;
-  pub use crate::gui::SearchEvent;
   pub use crate::search::SearchResults;
   pub use crate::app::*;
 }
