@@ -17,7 +17,7 @@ impl Plugin for GUIPlugin{
     fn build(&self, app: &mut App) {
         app
             .add_plugins(TextInputPlugin)
-            .add_plugins(PopOutWindowPlugin)
+            .add_plugins(PopOutPlugin)
             .add_event::<SearchEvent>()
             .add_systems(
                 Startup, 
