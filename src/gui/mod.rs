@@ -10,6 +10,7 @@ use bevy_simple_text_input::{
     TextInputValue
 };
 use bevy_pop_out_window::prelude::*;
+use book_entry::*;
 
 
 pub struct GUIPlugin;
@@ -19,6 +20,7 @@ impl Plugin for GUIPlugin{
             .add_plugins(TextInputPlugin)
             .add_plugins(PopOutPlugin)
             .add_event::<SearchEvent>()
+            .add_event::<AddGUIBookEvent>()
             .add_systems(
                 Startup, 
                 (init_gui, init_camera)
@@ -29,6 +31,15 @@ impl Plugin for GUIPlugin{
             ).add_systems(
                 Update, 
                 search_button_system.after(TextInputSystem)
+            ).add_systems(
+                Update, 
+                add_gui_book.run_if(on_event::<AddGUIBookEvent>())
+            ).add_systems(
+                Update, 
+                (
+                    clear_gui_books.before(load_gui_books).run_if(on_event::<SearchEvent>()),
+                    load_gui_books.run_if(on_event::<SearchEvent>()),
+                 )
             );
     }
 }
@@ -43,14 +54,14 @@ pub enum SortingBy {
     Book,
 }
 
-#[derive(Resource)]
-pub struct GUIRoot(Entity);
+#[derive(Component)]
+pub struct GUIRoot;
 
-#[derive(Resource)]
-pub struct BrowsView(Entity);
+#[derive(Component)]
+pub struct BrowsView;
 
-#[derive(Resource)]
-pub struct InfoView(Entity);
+#[derive(Component)]
+pub struct InfoView;
 
 #[derive(Component)]
 pub struct SearchText;
@@ -64,42 +75,51 @@ pub struct SelectionView;
 
 fn init_gui( mut commands: Commands, colors: Res<ColorPalette>) {
     let root = commands
-        .spawn(NodeBundle {
-            style: Style {
-                width: Val::Percent(100.0),
-                height: Val::Percent(100.0),
-                flex_direction: FlexDirection::Row,
-                justify_content: JustifyContent::SpaceBetween,
+        .spawn((
+            NodeBundle {
+                style: Style {
+                    width: Val::Percent(100.0),
+                    height: Val::Percent(100.0),
+                    flex_direction: FlexDirection::Row,
+                    justify_content: JustifyContent::SpaceBetween,
+                    ..default()
+                },
                 ..default()
             },
-            ..default()
-        }).id();
+            GUIRoot,
+        )).id();
     
     let brows_view = commands
-        .spawn(NodeBundle {
-            style: Style {
-                width: Val::Percent(33.25),
-                height: Val::Percent(100.0),
-                flex_direction: FlexDirection::Column,
-                justify_content: JustifyContent::SpaceEvenly,
+        .spawn((
+            NodeBundle {
+                style: Style {
+                    width: Val::Percent(33.25),
+                    height: Val::Percent(100.0),
+                    flex_direction: FlexDirection::Column,
+                    justify_content: JustifyContent::SpaceEvenly,
+                    ..default()
+                },
+                background_color: colors.brows_view().into(),
                 ..default()
             },
-            background_color: colors.brows_view().into(),
-            ..default()
-        }).id();
+            BrowsView
+        )).id();
 
     let info_view = commands
-        .spawn(NodeBundle {
-            style: Style {
-                width: Val::Percent(66.5),
-                height: Val::Percent(100.0),
-                flex_direction: FlexDirection::Column,
-                justify_content: JustifyContent::SpaceAround,
+        .spawn((
+            NodeBundle {
+                style: Style {
+                    width: Val::Percent(66.5),
+                    height: Val::Percent(100.0),
+                    flex_direction: FlexDirection::Column,
+                    justify_content: JustifyContent::SpaceAround,
+                    ..default()
+                },
+                background_color: colors.info_view().into(),
                 ..default()
             },
-            background_color: colors.info_view().into(),
-            ..default()
-        }).id();
+            InfoView,
+        )).id();
 
     {
         let searchbar = commands
@@ -330,3 +350,21 @@ pub struct CoverArtViewer;
 
 #[derive(Component)]
 pub struct MoreInfoViewer;
+
+fn load_gui_books(
+    mut book_adder: EventWriter<AddGUIBookEvent>,
+    mut books: Query<Entity, With<DataFolder>>,
+){
+    for book in books.iter(){
+        book_adder.send(AddGUIBookEvent(book));
+    }
+}
+
+fn clear_gui_books(
+    mut commands: Commands,
+    mut brows_view: Query<Entity, With<BrowsView>>,
+    mut children: Query<()>,
+){
+    let brows_view = brows_view.single();
+    todo!()
+}

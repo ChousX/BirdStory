@@ -74,14 +74,14 @@ pub struct AddGUIBookEvent(pub Entity);
 pub fn add_gui_book(
     mut events: EventReader<AddGUIBookEvent>,
     mut titles: Query<&Title>,
-    mut root: Query<Entity, With<_>>,
+    mut root: Query<Entity, With<InfoView>>,
     mut commands: Commands,
 ){
     for AddGUIBookEvent(book_entity) in events.read(){
         let mut book_builder = BookEntryBuilder::default();
 
-        if let Ok(Title(title)) = titles.get(book_entity){
-            book_builder = book_builder.add_title(title);
+        if let Ok(Title(title)) = titles.get(*book_entity){
+            book_builder = book_builder.add_title(title.clone());
         }
 
         let built = book_builder.build(&mut commands);
