@@ -11,4 +11,16 @@ impl Plugin for GUIPlugin{
     }
 }
 
+/*
+#[derive(Component)]
+pub struct GUIRoot;
+impl GUI for GUIRoot{
+    fn build(&self, commands: &mut Commands) -> Entity {
+    }
+}
+*/
+
+pub trait GUI: Component{
+    fn build(&self, commands: &mut Commands) -> Entity;
+}
 
