@@ -1,6 +1,6 @@
 use super::*;
 
-#[derive(Componet)]
+#[derive(Component)]
 pub struct CoverArtView(pub Handle<Image>);
 impl GUI for CoverArtView{
     fn build(&self, commands: &mut Commands) -> Entity {
