@@ -3,7 +3,8 @@ use super::*;
 #[derive(Component)]
 pub struct CoverArtView(pub Handle<Image>);
 impl GUI for CoverArtView{
-    fn build(&self, commands: &mut Commands) -> Entity {
+    fn build(self, commands: &mut Commands) -> Entity {
+        let texture = self.0.clone();
         let root = commands.spawn((
             NodeBundle{
                 style: Style{
@@ -12,7 +13,8 @@ impl GUI for CoverArtView{
                     ..default()
                 },
                 ..default()
-            }
+            },
+            self
         )).id();
 
         let padding0 = commands.spawn(
@@ -49,7 +51,7 @@ impl GUI for CoverArtView{
 
         let image = commands.spawn(UiImage{
             color: bevy::color::palettes::css::BLACK.into(),
-            texture: self.0.clone(),
+            texture,
             ..default()
         }).id();
         commands.entity(root).add_child(padding0);
