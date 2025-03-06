@@ -1,20 +1,8 @@
 [package]
-name = "StoryBird"
+name = "BirdStory"
 version = "0.1.0"
 edition = "2021"
 
-# See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
-
 [dependencies]
-bevy = { package = "bevy", version = "0.14.0" }
-bevy_simple_text_input = "0.8.0"
+bevy = "0.15"
 nfo = {git = "https://github.com/ChousX/nfo.git"}
-bevy_pop_out_window = {git = "https://github.com/ChousX/PopOutWindow.git", package = "PopOutWindow"}
-[profile.dev]
-opt-level = 1
-
-[profile.dev.package."*"]
-opt-level = 3
-
-# [features]
-# default = ["bevy/dynamic_linking"]

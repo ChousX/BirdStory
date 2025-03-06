@@ -1,22 +1,16 @@
-use StoryBird::{plugins::*, prelude::*};
+mod library;
 
+use bevy::prelude::*;
 fn main() {
-    App::new()
-        .add_plugins(DefaultPlugins
-            .set(
-                WindowPlugin {
-                    primary_window: Some(Window {
-                        title: APP_NAME.to_string(),
-                        ..Default::default()
-                    }),
-                    ..Default::default()
-                }
-        ))
-        .add_plugins((
-            GUIPlugin, 
-            ColorPalettePlugin, 
-            FilesPlugin,
-            BiblioPlugin,
-         ))
-        .run();
+    let mut app = App::new();
+    app.add_plugins(DefaultPlugins).init_state::<AppState>();
+
+    let _ = app.run();
+}
+
+#[derive(States, Default, Debug, Clone, PartialEq, Eq, Hash)]
+pub enum AppState {
+    #[default]
+    Library,
+    Player,
 }
