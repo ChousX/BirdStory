@@ -17,15 +17,15 @@ impl Plugin for LibraryPlugin {
 pub fn add_book(mut commmands: Commands, query: Query<&PathToBook>) {
     for PathToBook(path) in query.iter() {
         let path = Path::new(&path);
-        let files = if path.is_file() {
+        let mut files = if path.is_file() {
             let p = PathBuf::from(path);
             let extension = p
                 .extension()
                 .and_then(|ext| ext.to_str())
                 .expect("failed to convert to str")
                 .to_string();
-            let mut out = HashMap::with_capacity(1);
-            out.insert(extension, p);
+            let mut out = Vec::with_capacity(1);
+            out.push((extension, p));
             out
         } else {
             if let Ok(files) = path.read_dir() {
@@ -56,15 +56,26 @@ pub fn add_book(mut commmands: Commands, query: Query<&PathToBook>) {
         let mut author = None;
         let mut narator = None;
 
-        if let Some(nfo_path) = files.get("nfo") {
+        fn is_more_work(
+            title: Option<String>,
+            author: Option<String>,
+            narator: Option<String>,
+        ) -> bool {
+            title.is_none() || author.is_none() || narator.is_none()
+        }
+
+        if let Some(index) = files
+            .iter()
+            .position(|(extention, _file)| extention == "nfo")
+        {
+            let (_extention, nfo_path) = &files[index];
             let nfo = Nfo::new(nfo_path).expect("Could not parse nfo file");
             title = nfo.general.title;
             author = nfo.general.author;
             narator = nfo.general.read_by;
-            files.remove("nfo");
         }
-        if 
-        if title.is_some()
+
+        if is_more_work(title, author, narator) {}
     }
 }
 
