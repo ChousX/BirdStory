@@ -9,20 +9,67 @@ use nfo::*;
 
 use audiotags as AT;
 
-use bevy::{prelude::*, utils::HashMap};
+use bevy::{
+    prelude::*,
+    utils::{HashMap, HashSet},
+};
 
 pub struct LibraryPlugin;
 impl Plugin for LibraryPlugin {
-    fn build(&self, app: &mut App) {}
+    fn build(&self, app: &mut App) {
+        app.add_event::<UpdateLibraryEvent>().add_systems(
+            Update,
+            (regester_books, add_book)
+                .chain()
+                .distributive_run_if(on_event::<UpdateLibraryEvent>),
+        );
+    }
+}
+
+#[derive(Event)]
+pub struct UpdateLibraryEvent;
+
+pub fn regester_books(
+    mut commands: Commands,
+    library_storage: Query<&LibraryStorage>,
+    paths_to_books: Query<&PathToBook>,
+) {
+    let mut already_loaded = HashSet::default();
+    for PathToBook(path) in paths_to_books.iter() {
+        already_loaded.insert(PathBuf::from(path));
+    }
+    for LibraryStorage(root) in library_storage.iter() {
+        let dir_iter = root
+            .read_dir()
+            .expect("Library Storage was not set to directory");
+
+        for dir_entry in dir_iter {
+            if let Ok(dir_entry) = dir_entry {
+                let path = dir_entry.path();
+                if !already_loaded.contains(&path) {
+                    commands.spawn(PathToBook(path));
+                }
+            }
+        }
+    }
 }
 
 pub fn add_book(
     mut commmands: Commands,
-    query: Query<(&PathToBook, Entity)>,
+    query: Query<(
+        &PathToBook,
+        Entity,
+        Option<&Author>,
+        Option<&Narator>,
+        Option<&Title>,
+    )>,
     mut authors: ResMut<Authors>,
     mut narators: ResMut<Narators>,
 ) {
-    for (PathToBook(path), entity) in query.iter() {
+    for (PathToBook(path), entity, author, narator, title) in query.iter() {
+        if author.is_some() & narator.is_some() & title.is_some() {
+            continue;
+        }
         let path = Path::new(&path);
         let mut files = if path.is_file() {
             let p = PathBuf::from(path);
@@ -59,9 +106,9 @@ pub fn add_book(
             }
         };
 
-        let mut title = None;
-        let mut author = None;
-        let mut narator = None;
+        let mut title = title.map(|s| s.0.to_string());
+        let mut author = author.map(|s| s.0.to_string());
+        let mut narator = narator.map(|s| s.0.to_string());
 
         if let Some(index) = files
             .iter()
@@ -125,7 +172,10 @@ pub fn add_book(
 }
 
 #[derive(Component)]
-pub struct PathToBook(pub String);
+pub struct LibraryStorage(pub PathBuf);
+
+#[derive(Component)]
+pub struct PathToBook(pub PathBuf);
 
 #[derive(Component)]
 pub struct Title(pub String);
