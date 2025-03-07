@@ -1,9 +1,12 @@
 mod library;
 
 use bevy::prelude::*;
+use library::LibraryPlugin;
 fn main() {
     let mut app = App::new();
-    app.add_plugins(DefaultPlugins).init_state::<AppState>();
+    app.add_plugins(DefaultPlugins)
+        .init_state::<AppState>()
+        .add_plugins(LibraryPlugin);
 
     let _ = app.run();
 }

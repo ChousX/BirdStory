@@ -11,6 +11,7 @@ use audiotags as AT;
 
 use bevy::{
     prelude::*,
+    transform::commands,
     utils::{HashMap, HashSet},
 };
 
@@ -21,6 +22,11 @@ impl Plugin for LibraryPlugin {
             .init_resource::<Narators>()
             .init_resource::<Seriess>()
             .add_event::<UpdateLibraryEvent>()
+            .add_event::<AddedLibraryStorageEvent>()
+            .add_systems(
+                Update,
+                add_library_storage.run_if(on_event::<AddedLibraryStorageEvent>),
+            )
             .add_systems(
                 Update,
                 (regester_books, add_book)
@@ -32,6 +38,27 @@ impl Plugin for LibraryPlugin {
 
 #[derive(Event)]
 pub struct UpdateLibraryEvent;
+
+#[derive(Event)]
+pub struct AddedLibraryStorageEvent(pub PathBuf);
+
+pub fn add_library_storage(
+    mut commands: Commands,
+    mut new_storage_events: EventReader<AddedLibraryStorageEvent>,
+    storage: Query<&LibraryStorage>,
+) {
+    let mut existing_storage = HashSet::new();
+    for LibraryStorage(path) in storage.iter() {
+        existing_storage.insert(path.as_path());
+    }
+
+    for AddedLibraryStorageEvent(new_storage) in new_storage_events.read() {
+        if !existing_storage.contains(new_storage.as_path()) {
+            existing_storage.insert(new_storage.as_path());
+            commands.spawn(LibraryStorage(new_storage.clone()));
+        }
+    }
+}
 
 pub fn regester_books(
     mut commands: Commands,
