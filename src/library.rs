@@ -1,17 +1,9 @@
-use std::{
-    ffi::OsStr,
-    fs,
-    marker::PhantomData,
-    path::{Path, PathBuf},
-};
+use std::path::{Path, PathBuf};
 
 use nfo::*;
 
-use audiotags as AT;
-
 use bevy::{
     prelude::*,
-    transform::commands,
     utils::{HashMap, HashSet},
 };
 
@@ -102,7 +94,7 @@ pub fn add_book(
             continue;
         }
         let path = Path::new(&path);
-        let mut files = if path.is_file() {
+        let files = if path.is_file() {
             let p = PathBuf::from(path);
             let extension = p
                 .extension()
@@ -158,7 +150,7 @@ pub fn add_book(
                 .position(|(extention, _file)| extention == "m4b")
             {
                 let (_extention, m4b_path) = &files[index];
-                let tag = AT::Tag::new()
+                let tag = audiotags::Tag::new()
                     .read_from_path(m4b_path)
                     .expect("Could not parse tag");
                 let album = tag.album().expect("failed to get album");
@@ -177,7 +169,7 @@ pub fn add_book(
                 .position(|(extention, _file)| extention == "mp3")
             {
                 let (_extention, m4b_path) = &files[index];
-                let tag = AT::Tag::new()
+                let tag = audiotags::Tag::new()
                     .read_from_path(m4b_path)
                     .expect("Could not parse tag");
                 let album = tag.album().expect("failed to get album");
