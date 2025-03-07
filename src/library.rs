@@ -17,12 +17,16 @@ use bevy::{
 pub struct LibraryPlugin;
 impl Plugin for LibraryPlugin {
     fn build(&self, app: &mut App) {
-        app.add_event::<UpdateLibraryEvent>().add_systems(
-            Update,
-            (regester_books, add_book)
-                .chain()
-                .distributive_run_if(on_event::<UpdateLibraryEvent>),
-        );
+        app.init_resource::<Authors>()
+            .init_resource::<Narators>()
+            .init_resource::<Seriess>()
+            .add_event::<UpdateLibraryEvent>()
+            .add_systems(
+                Update,
+                (regester_books, add_book)
+                    .chain()
+                    .distributive_run_if(on_event::<UpdateLibraryEvent>),
+            );
     }
 }
 
@@ -180,8 +184,31 @@ pub struct PathToBook(pub PathBuf);
 #[derive(Component)]
 pub struct Title(pub String);
 
-#[derive(Resource)]
-pub struct Series;
+#[derive(Component, Clone)]
+pub struct Series {
+    pub title: String,
+    pub authors: Vec<usize>,
+    pub books: Vec<Entity>,
+}
+
+#[derive(Resource, Default, Clone)]
+pub struct Seriess {
+    pub entries: Vec<Series>,
+    pub indices: HashMap<String, usize>,
+}
+
+impl Seriess {
+    fn get_or_insert(&mut self, series: &Series) -> usize {
+        if let Some(&index) = self.indices.get(&series.title) {
+            index
+        } else {
+            let index = self.entries.len();
+            self.entries.push(series.clone());
+            self.indices.insert(series.title.clone(), index);
+            index
+        }
+    }
+}
 
 #[derive(Resource, Default)]
 pub struct Authors {
@@ -217,7 +244,7 @@ impl Authors {
 #[derive(Component)]
 pub struct Author(pub usize);
 
-#[derive(Resource)]
+#[derive(Resource, Default)]
 pub struct Narators {
     entries: Vec<String>,
     indices: HashMap<String, usize>,
